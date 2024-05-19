@@ -7,6 +7,7 @@
 
 pub fn factorial(n: u32) -> u32 {
     let mut result = 1;
+    let limit = u32::MAX;
     for i in 1..=n {
         result *= i;
     }
