@@ -7,11 +7,35 @@
 struct Ticket {
     title: String,
     description: String,
-    status: String,
+    status: Status,
 }
 
+#[derive(Debug, PartialEq, Clone, Copy)]
 enum Status {
-    // TODO: add the missing variants
+    ToDo,
+    InProgress,
+    Done,
+}
+
+impl From<&str> for Status {
+    fn from(s: &str) -> Self {
+        match s {
+            "To-Do" => Status::ToDo,
+            "In Progress" => Status::InProgress,
+            "Done" => Status::Done,
+            _ => panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed"),
+        }
+    }
+}
+
+impl From<Status> for String {
+    fn from(s: Status) -> Self {
+        match s {
+            Status::ToDo => "To-Do".to_string(),
+            Status::InProgress => "In Progress".to_string(),
+            Status::Done => "Done".to_string(),
+        }
+    }
 }
 
 impl Ticket {
@@ -32,6 +56,7 @@ impl Ticket {
             panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
         }
 
+        let status = Status::from(status.as_str());
         Ticket {
             title,
             description,
@@ -47,7 +72,7 @@ impl Ticket {
         &self.description
     }
 
-    pub fn status(&self) -> &String {
+    pub fn status(&self) -> &Status {
         &self.status
     }
 }
