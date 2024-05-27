@@ -23,6 +23,11 @@ pub enum TicketNewError {
     DescriptionCannotBeEmpty,
     #[error("Description cannot be longer than 500 characters")]
     DescriptionTooLong,
+    #[error("{inner}")]
+    IvalidStatus {
+        #[from]
+        inner: status::ParseStatusError
+    }
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -46,6 +51,7 @@ impl Ticket {
         if description.len() > 500 {
             return Err(TicketNewError::DescriptionTooLong);
         }
+        let status = Status::try_from(status)?;
 
         // TODO: Parse the status string into a `Status` enum.
 
